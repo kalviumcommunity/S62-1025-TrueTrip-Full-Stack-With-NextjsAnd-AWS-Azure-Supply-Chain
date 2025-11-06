@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken"; // <-- change here
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
@@ -8,7 +8,9 @@ export async function GET(req: Request) {
     const authHeader = req.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
 
-    if (!token) return NextResponse.json({ success: false, message: "Token missing" }, { status: 401 });
+    if (!token) {
+      return NextResponse.json({ success: false, message: "Token missing" }, { status: 401 });
+    }
 
     const decoded = jwt.verify(token, JWT_SECRET);
     return NextResponse.json({ success: true, message: "Protected data", user: decoded });

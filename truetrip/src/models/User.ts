@@ -1,11 +1,9 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { prisma } from "@/lib/prisma";
 
-const userSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+export const createUser = async (data: { name: string; email: string; password: string }) => {
+  return await prisma.user.create({ data });
+};
 
-const User = models.User || model("User", userSchema);
-export default User;
+export const getUserByEmail = async (email: string) => {
+  return await prisma.user.findUnique({ where: { email } });
+};
