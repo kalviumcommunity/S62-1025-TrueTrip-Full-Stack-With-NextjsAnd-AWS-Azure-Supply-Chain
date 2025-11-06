@@ -110,3 +110,82 @@ Adding .env.local to .gitignore (so it never gets committed).
 Providing .env.example with safe placeholder values for teammates to replicate their setup securely.
 
 !(Img/env.png)
+
+Docker Setup Summary
+
+This project uses Docker to containerize the Next.js frontend, PostgreSQL database, and Redis cache. The Dockerfile builds and runs the Next.js app — it installs dependencies, builds the project, and serves it on port 3000. The docker-compose.yml file manages multiple services together, linking them through a shared network and using volumes for persistent data.
+
+During setup, I faced issues like missing package.json paths, Docker daemon not running, and version warnings in docker-compose.yml. These were fixed by correcting file paths, starting Docker Desktop, and removing deprecated fields.
+
+After resolving these, all containers built successfully, and the app ran smoothly inside Docker. This setup ensures consistent builds, easier debugging, and a fully portable development environment.
+
+!(Docker.png)
+
+!(Docker1.png)
+
+Authentication APIs (Signup / Login)
+
+Overview
+
+This project implements secure authentication APIs for a Next.js app. Users can sign up, log in, and access protected routes.
+
+Why: 
+Authentication ensures only valid users can access sensitive data. Security here is critical because exposing user credentials can compromise the entire app.
+
+Authentication Flow
+
+Signup:
+Users provide name, email, and password.
+Passwords are hashed before storing in the database.
+
+Why: 
+Hashing protects user passwords even if the database is leaked.
+
+Login:
+Users log in with email and password.
+On success, a JWT token is issued, which encodes user identity and expiry.
+
+Why: 
+JWT allows the server to trust requests without storing session info.
+
+Protected Routes:
+Endpoints require a valid JWT token to access.
+
+Why: 
+This ensures sensitive routes are not accessible to unauthorized users.
+
+Testing the APIs:
+Signup: Verify new users are created successfully.
+Login: Verify JWT is issued for correct credentials.
+Protected Routes: Verify valid tokens allow access and invalid/missing tokens are rejected.
+
+Why: 
+Testing ensures the authentication system works as intended and prevents security gaps.
+
+Environment Variables:
+.env.local → stores real credentials like DATABASE_URL, JWT_SECRET (never pushed to GitHub).
+.env.example → sample file with placeholder values for teammates to set up their environment.
+.gitignore → ensures .env.local is not committed.
+
+Server-side variables: 
+Only accessible in the backend.
+
+Client-side variables: 
+Only variables starting with NEXT_PUBLIC_ are safe for frontend use.
+
+Why:
+Keeps secrets safe, prevents accidental exposure, and allows easy environment setup.
+
+Security Considerations:
+Tokens expire after 1 hour.
+Tokens can be stored in cookies or localStorage depending on app needs.
+Refresh strategies are necessary for long-lived sessions.
+
+Why: 
+Proper token management prevents unauthorized access and ensures smooth user experience.
+!(login.png)
+!(signup.png)
+!(user.png)
+
+
+changes made 
