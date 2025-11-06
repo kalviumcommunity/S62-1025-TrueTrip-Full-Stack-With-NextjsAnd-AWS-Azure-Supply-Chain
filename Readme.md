@@ -110,19 +110,3 @@ Adding .env.local to .gitignore (so it never gets committed).
 Providing .env.example with safe placeholder values for teammates to replicate their setup securely.
 
 !(Img/env.png)
-
----------------------------------------------------------------------------------------
-
-Docker Setup Summary
-
-This project uses Docker to containerize the Next.js frontend, PostgreSQL database, and Redis cache.
-The Dockerfile builds and runs the Next.js app — it installs dependencies, builds the project, and serves it on port 3000.
-The docker-compose.yml file manages multiple services together, linking them through a shared network and using volumes for persistent data.
-
-During setup, I faced issues like missing package.json paths, Docker daemon not running, and version warnings in docker-compose.yml. These were fixed by correcting file paths, starting Docker Desktop, and removing deprecated fields.
-
-After resolving these, all containers built successfully, and the app ran smoothly inside Docker. This setup ensures consistent builds, easier debugging, and a fully portable development environment.
-
-!(Docker.png)
-
-!(Docker1.png)
