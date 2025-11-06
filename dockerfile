@@ -2,20 +2,25 @@
 FROM node:20-alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /app/truetrip
 
-# Copy only package files first and install dependencies
-COPY truetrip/package*.json ./truetrip/
-RUN npm install --prefix ./truetrip
+# Copy package.json and package-lock.json
+COPY truetrip/package*.json ./
 
-# Copy the rest of the project files
-COPY . .
+# Install dependencies
+RUN npm install
 
-# Build the app
-RUN npm run build --prefix ./truetrip
+# Copy the rest of the project
+COPY truetrip/ ./
 
-# Expose the app port
+# Generate Prisma client (correct path)
+RUN npx prisma generate --schema=./src/app/prisma/schema.prisma
+
+# Build Next.js app
+RUN npm run build
+
+# Expose app port
 EXPOSE 3000
 
 # Start the app
-CMD ["npm", "run", "start", "--prefix", "./truetrip"]
+CMD ["npm", "run", "start"]
